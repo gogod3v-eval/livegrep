@@ -25,6 +25,17 @@ jobs:
             sudo ln -s /usr/local/bin/bazelisk /usr/local/bin/bazel
             bazel --version
       - run:
+          name: "Bitrise Build Cache"
+          command: |
+            #!/usr/bin/env bash
+            set -euxo pipefail
+
+            # download Bitrise Build Cache CLI
+            curl -sSfL 'https://raw.githubusercontent.com/bitrise-io/bitrise-build-cache-cli/main/install/installer.sh' | sh -s -- -b /tmp/bin -d
+
+            # run the CLI to enable Bitrise build cache for Bazel
+            /tmp/bin/bitrise-build-cache enable-for bazel
+      - run:
           name: "bazel test //..."
           command: |
             bazel test //...
